@@ -99,6 +99,24 @@ class Polynomial:
     def lead(self):
         return self.coefs[self.degree];
 
+
+    # Return derivative of polynomial
+    # Private method! ( see derivative() )
+    def _derivative(self):
+        # Derivative of constant polynomial is the null polynomial
+        if (len(self.coefs) == 1): return Polynomial(0);
+
+        # Compute derivative
+        der_coefs = [self.coefs[exp]*exp for exp in range(1,self.degree+1)];
+        return Polynomial(*der_coefs);
+
+    
+    # Return nth derivative of polynomial
+    def derivative(self,n=1):
+        der = self;
+        for order in range(n):
+            der = der._derivative();
+        return der;
     
     # Override __str__ method
     def __str__(self):
