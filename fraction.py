@@ -3,6 +3,12 @@ from math import gcd
 class Fraction:
 
     def __init__(self, numerator, denominator = 1):
+        #Determine if input is already a Fraction object
+        if (isinstance(numerator, Fraction)):
+            self.numerator = numerator.numerator;
+            self.denominator = numerator.denominator;
+            return;
+
         # Find numerator and denominator if either input is not integer
         if (not isinstance(numerator, int)):
             while (not float.is_integer(numerator)):
@@ -24,6 +30,8 @@ class Fraction:
 
     # Implement multiplication of fractions
     def __mul__(self, other):
+        other = Fraction(other);
+
         num = self.numerator * other.numerator;
         den = self.denominator * other.denominator;
 
@@ -32,6 +40,8 @@ class Fraction:
 
     # Implement sum of fractions
     def __add__(self, other):
+        other = Fraction(other);
+        
         num = self.numerator * other.denominator + self.denominator * other.numerator;
         den = self.denominator * other.denominator;
         
@@ -40,11 +50,15 @@ class Fraction:
 
     # Implement difference of fractions
     def __sub__(self, other):
+        other = Fraction(other);
+
         return ( self + (-other) );
 
 
     # Implement division of fractions
     def __truediv__(self,other):
+        other = Fraction(other);
+
         return self * other.inverse();
 
 
@@ -53,12 +67,26 @@ class Fraction:
         return Fraction(-self.numerator, self.denominator);
 
     
-    # Override __str__
+    # Override __str__ method
     def __str__(self):
         if (self.denominator == 1):
             return f'{self.numerator}';
         
         return f'{self.numerator}/{self.denominator}';
+
+
+    # Implement equality
+    def __eq__(self, other):
+        if (isinstance(other, Fraction)):
+            return self.numerator == other.numerator and \
+                   self.denominator == other.denominator;
+        
+        return self.numerator / self.denominator == other;
+
+
+    # Implement inequality
+    def __ne__(self, other):
+        return not self == other;
 
 
     # Find inverse of fraction
