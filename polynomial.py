@@ -1,3 +1,4 @@
+import re
 from fraction import Fraction
 from itertools import zip_longest
 
@@ -39,8 +40,7 @@ class Polynomial:
     def __mul__(self, other):
         # Check if other input is not a polynomial
         if (not isinstance(other, Polynomial)):
-            prod_coefs = [Fraction(other)*coef for coef in self.coefs];
-            return Polynomial(*prod_coefs);
+            other = Polynomial(other);
 
         # Check if either input is the null polynomial
         if (self.degree == -1 or other.degree == -1):
@@ -66,6 +66,9 @@ class Polynomial:
     # Implement polynomial division
     # Returns both quotient and remainder (operator /)
     def __truediv__(n, d):
+        if (not isinstance(d, Polynomial)):
+            d = Polynomial(d);
+
         if (d.degree == -1): return None;
 
         q = Polynomial(0);
@@ -95,6 +98,14 @@ class Polynomial:
         return self * (-1);
 
 
+    # Return polynomial elevated to a power
+    def __pow__(self, power):
+        pow = Polynomial(1);
+        for i in range(power):
+            pow *= self;
+        return pow;
+
+
     # Return leading coefficient of polynomial
     def lead(self):
         return self.coefs[self.degree];
@@ -121,14 +132,13 @@ class Polynomial:
     # Override __str__ method
     def __str__(self):
         s = '';
+
         for exp, coef in enumerate(self.coefs):
-            if (exp == 0):
-                s += f'{coef}';
-            else:
-                if coef.is_positive():
-                    s += f' + {coef if coef != 1 else ""}x^{exp}'
-                elif coef.is_negative():
-                    s += f' - {-coef if coef != -1 else ""}x^{exp}'
-                else:
-                    s += '';
-        return s;
+            sign ='+' if coef >= 0 else '-';
+            term = (str(abs(coef)) if abs(coef) != 1 or exp == 0 else '') + ('x' if exp != 0 else '');
+            exponent = '^'+str(exp) if exp > 1 else '';
+
+            s += f' {sign} {term}{exponent}' if coef != 0 else '';
+
+        
+        return s[3:] if s[1] == '+' else s[1:];

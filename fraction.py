@@ -89,6 +89,39 @@ class Fraction:
         return not self == other;
 
 
+    # Implement > operator
+    def __gt__(self, other):
+        if isinstance(other, Fraction):
+            return self.numerator / self.denominator > \
+                   other.numerator / other.denominator;
+        
+        return self.numerator / self.denominator > other;
+
+
+    # Implement >= operator
+    def __ge__(self, other):
+        return self > other or self == other;
+        
+
+    # Implement < operator
+    def __lt__(self, other):
+        if isinstance(other, Fraction):
+            return self.numerator / self.denominator < \
+                   other.numerator / other.denominator;
+            
+        return self.numerator / self.denominator < other;
+
+
+    # Implement <= operator
+    def __le__(self, other):
+        return self < other or self == other;
+
+
+    # Implement absolute value function
+    def __abs__(self):
+        return Fraction(abs(self.numerator), self.denominator);
+
+
     # Find inverse of fraction
     def inverse(self):
         return Fraction(self.denominator, self.numerator);
